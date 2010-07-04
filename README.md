@@ -30,4 +30,4 @@ With jquery.stubs, your unit test might look like:
       equals(actual, false);
     });
 
-You can also stub jQuery functions (like `$.ajax()`) using `$.stubs.addForFunction`, and you can remove all stubs with `$.stubs.removeAll()`. For further examples of how to use jquery.stubs, see its spec (/spec/spec.html).
+You can also stub jQuery functions (like `$.ajax()`) using `$.stubs.addForFunction`, and you can remove all stubs with `$.stubs.removeAll()`. For further examples of how to use jquery.stubs, see [its spec](http://github.com/anglicangeek/jquery.stubs/blob/master/spec/spec.html).
