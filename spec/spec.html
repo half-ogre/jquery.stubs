@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="../jquery-1.4.2.js"></script>
+    <script type="text/javascript" src="qunit.js"></script>
+    <script type = "text/javascript" src="../jquery.stubs.js"></script>
+    <link rel="stylesheet" href="qunit.css" type="text/css" />
+    <script>
+      var lifecycle = {
+        teardown: function() { $.stubs.removeAll(); }
+      }
+        
+      $(document).ready(function(){
+        
+        module("the $.stubs.addForSelector method", lifecycle);
+
+        test("will add a stub for a string selector", function() {
+          var stubInvoked = null;
+          $.stubs.addForSelector("div.foo", function(stub) {
+            stubInvoked = true;
+          });
+          
+          $('div.foo');
+          
+          equals(stubInvoked, true);
+        });
+        
+        test("will add a stub for a string selector within a context", function() {
+          var actual = null;
+          $.stubs.addForSelector("div.foo", function(stub) {
+            stub.click = function(handler) {
+              $.stubs.addForSelector("span", stub, function(stub) {
+                stub.addClass = function(className) {
+                  actual = className;
+                }
+              });
+              handler.call(stub);
+            }
+          });
+          
+          $('div.foo').click(function() {
+            $('span', this).addClass('bar');
+          });
+          
+          equals(actual, 'bar');
+        });
+        
+        module("the $.stubs.addForFunction method", lifecycle);
+        
+        test("will add a stub for a function", function() {
+          var stubInvoked = null,
+              settings = { validate: false, limit: 5, name: "foo" },
+              options = { validate: true, name: "bar" };
+          $.stubs.addForFunction("extend", function(first, second) {
+            stubInvoked = true;
+            equals(first, settings);
+            equals(second, options);
+          });
+          
+          $.extend(settings, options);
+          
+          equals(stubInvoked, true);
+        });
+        
+        module("the $.stubs.removeAll method");
+        
+        test("will remove all selector stubs", function() {
+          $.stubs.addForSelector("#qunit-header", function(stub) {
+            stub.text = function() {
+              return "stubbedText";
+            }
+          });
+          
+          $.stubs.removeAll();
+          
+          var actual = $("#qunit-header").text();
+          equals(actual, "fiber_chat Client Spec'");
+        })
+        
+        test("will remove all function stubs", function() {
+          $.stubs.addForFunction("isArray", function(obj) {
+            return false;
+          });
+          
+          $.stubs.removeAll();
+          
+          var actual = $.isArray([]);
+          equals(actual, true);
+        })
+        
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">fiber_chat Client Spec'</h1>
+    <h2 id="qunit-banner"></h2>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+  </body>
+</html>
