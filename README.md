@@ -1,17 +1,20 @@
-jquery.stubs - A jQuery plugin for stubbing jQuery, to make unit testing jQuery less painful
+jquery.stubs
 ============
+_A jQuery plugin for stubbing jQuery, to make unit testing jQuery less painful_
 
 How to use jquery.stubs
 -----------------------
 Let's say you want to unit test the following code: 
 
-    $(#theForm).submit(function() {
-      return false;
-    });
+    function preventFormSubmit() {
+      $("#theForm").submit(function() {
+        return false;
+      });
+    }
 
 With jquery.stubs, your unit test might look like:
 
-    test("will prevent the form from submitting", function() {
+    test("the preventFormSubmit() method will prevent the form from submitting", function() {
       // arrange
       var actual = null;
       $.stubs.addForSelector("#theForm", function(stub) {
@@ -21,10 +24,8 @@ With jquery.stubs, your unit test might look like:
       });
   
       // act
-      $(#theForm).submit(function() {
-        return false;
-      });
-  
+      preventFormSubmit();
+      
       // assert
       equals(actual, false);
     });
