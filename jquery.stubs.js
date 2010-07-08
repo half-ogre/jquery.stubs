@@ -24,13 +24,13 @@
     }
 
     return new _init(selector, context);
-  }
+  };
   
   $.stubs = { 
     addForSelector: function() { 
       var callback = arguments[arguments.length - 1],
           selector = arguments[0],
-          context = undefined;
+          context;
           
       if (arguments.length > 2) {
         context = arguments[1];
