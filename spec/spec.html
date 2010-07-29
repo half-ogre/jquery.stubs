@@ -47,6 +47,20 @@
           
           equals(actual, 'bar');
         });
+		
+		test("will allow adding multiple elements into the selector stub", function() {
+          $.stubs.addForSelector("div.foo", function(stub) {
+            stub[0] = "0";
+			stub[1] = "1";
+			stub.length = 2;
+          });
+          
+          var actual = $('div.foo');
+          
+          equals(actual[0], "0");
+		  equals(actual[1], "1");
+		  equals(actual.length, 2);
+		});
         
         module("the $.stubs.addForFunction method", lifecycle);
         
